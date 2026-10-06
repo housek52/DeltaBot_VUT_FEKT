@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="ObjectHierarchy" Type="objecthierarchy">
+    <Group ID="GlobalCoordinateSystem">
+      <Group ID="Object[1]">
+        <Selector ID="Type">
+          <Property ID="AxesGroupRef" Value="g3AxDeltaB" />
+        </Selector>
+      </Group>
+    </Group>
+  </Element>
+</Configuration>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="MechSys_3AxDeltaB" Type="mechanicalsystem">
+    <Selector ID="Type" Value="Delta">
+      <Selector ID="Subtype" Value="3AxesDeltaB">
+        <Selector ID="Description">
+          <Group ID="Dimensions">
+            <Group ID="BasePlatform">
+              <Group ID="Center">
+                <Property ID="Z" Value="797.14" />
+              </Group>
+              <Group ID="Arm1LinkPoint">
+                <Property ID="Radius" Value="420.36" />
+              </Group>
+              <Group ID="Arm2LinkPoint">
+                <Property ID="Angle" Value="120.0" />
+                <Property ID="Radius" Value="420.36" />
+              </Group>
+              <Group ID="Arm3LinkPoint">
+                <Property ID="Angle" Value="240.0" />
+                <Property ID="Radius" Value="420.36" />
+              </Group>
+            </Group>
+            <Group ID="Arms">
+              <Group ID="Arm1">
+                <Property ID="ArmLength" Value="500" />
+                <Property ID="ArmOffset" Value="-435" />
+                <Property ID="ArmAngle" Value="45" />
+              </Group>
+              <Group ID="Arm2">
+                <Property ID="ArmLength" Value="500" />
+                <Property ID="ArmOffset" Value="-435" />
+                <Property ID="ArmAngle" Value="45" />
+              </Group>
+              <Group ID="Arm3">
+                <Property ID="ArmLength" Value="500" />
+                <Property ID="ArmOffset" Value="-435" />
+                <Property ID="ArmAngle" Value="45" />
+              </Group>
+            </Group>
+            <Group ID="EndEffectorPlatform">
+              <Group ID="Arm1LinkPoint">
+                <Property ID="Radius" Value="46.27" />
+              </Group>
+              <Group ID="Arm2LinkPoint">
+                <Property ID="Radius" Value="46.27" />
+              </Group>
+              <Group ID="Arm3LinkPoint">
+                <Property ID="Radius" Value="46.27" />
+              </Group>
+              <Group ID="TranslationToFlange">
+                <Property ID="Z" Value="-6" />
+              </Group>
+            </Group>
+          </Group>
+          <Group ID="Offsets">
+            <Property ID="JointAxis[1]" />
+            <Property ID="JointAxis[2]" />
+            <Property ID="JointAxis[3]" />
+          </Group>
+          <Group ID="CountDirections">
+            <Property ID="JointAxis[1]" />
+            <Property ID="JointAxis[2]" />
+            <Property ID="JointAxis[3]" />
+          </Group>
+        </Selector>
+        <Group ID="JointAxesPositionLimits">
+          <Selector ID="JointAxis[1]" />
+          <Selector ID="JointAxis[2]" />
+          <Selector ID="JointAxis[3]" />
+        </Group>
+      </Selector>
+    </Selector>
+  </Element>
+</Configuration>

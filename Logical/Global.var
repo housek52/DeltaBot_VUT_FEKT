@@ -1,0 +1,7 @@
+VAR
+	DAxis : MpDelta3Axis;
+	DPara : MpDelta3AxisParType;
+	W : LREAL;
+	V : LREAL;
+	U : LREAL;
+END_VAR

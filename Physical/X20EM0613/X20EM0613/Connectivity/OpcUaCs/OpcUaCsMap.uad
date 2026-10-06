@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="6.0"?>
+<OpcUaSource FileVersion="10">
+  <Aliases>
+    <ACLAliases />
+    <EURangeViolationAliases />
+    <EURangesAliases />
+    <EngineeringUnitAliases />
+  </Aliases>
+  <Module Name="&lt;Default&gt;">
+    <GlobalVariables Name="Global Variables">
+      <Variable Name="DAxis">
+        <Variable Name="Info">
+          <Variable Name="JointAxisPosition" RecursiveEnable="2" />
+        </Variable>
+      </Variable>
+      <Variable Name="U" />
+      <Variable Name="V" />
+      <Variable Name="W" />
+    </GlobalVariables>
+  </Module>
+</OpcUaSource>

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="gAxisQ1" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded" />
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="0" />
+        <Property ID="UpperLimit" Value="270" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="1000" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="10000" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="10000" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="gAxisQ2" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded" />
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="0" />
+        <Property ID="UpperLimit" Value="270" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="1000" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="10000" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="10000" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="gAxisQ3" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded" />
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="0" />
+        <Property ID="UpperLimit" Value="270" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="1000" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="10000" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="10000" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="gAxisQ4" Type="axis">
+    <Selector ID="BaseType" Value="RotaryBounded" />
+    <Selector ID="MovementLimits">
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="10.0" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="50.0" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="50.0" />
+      </Selector>
+    </Selector>
+  </Element>
+</Configuration>

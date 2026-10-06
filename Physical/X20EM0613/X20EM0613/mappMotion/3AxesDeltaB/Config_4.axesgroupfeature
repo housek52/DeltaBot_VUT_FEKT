@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="Feature_Programs" Type="axesgroupfeature" />
+  <Element ID="Feature_Jogging" Type="axesgroupfeature">
+    <Selector ID="Type" Value="Jogging" />
+  </Element>
+</Configuration>
