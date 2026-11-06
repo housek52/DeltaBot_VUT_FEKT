@@ -1,4 +1,11 @@
+# B&R Automation Studio
 Binaries/
 Diagnosis/
 Temp/
 *.set
+
+# Matlab
+*.asv
+*.slxc
+slprj/
+*.mex*
