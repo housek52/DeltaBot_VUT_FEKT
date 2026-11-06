@@ -1,0 +1,9 @@
+clc, clear variables, close all
+
+rozmer = [50,370,50,500,50];    % [offset, rameno, offset od ramena, karbon tyc ,offset k konec bodu]
+pos = [0,0,0] ;            % [x,y,z]
+
+natazeni = [0,0,0];
+%[pos(1),pos(2),pos(3)] = PrimaKinematika(rozmer,natazeni);
+[U,V,W] = InverzniKinematika(rozmer,pos);
+vykresleni_deltabot(rozmer,pos)
