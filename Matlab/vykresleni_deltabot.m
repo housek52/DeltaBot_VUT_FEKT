@@ -20,14 +20,19 @@
 % 
 % Přidaný vstupy:
 %     - translace = posunutí o x,y,z
+%     - rotace = otočení okolo osy z robotu ve stupních
+%     - barva = barva joku se vykreslí model
 %==========================================================================
 
-function [] = vykresleni_deltabot(rozmer,konec,translace,rotace)
+function [] = vykresleni_deltabot(rozmer,konec,translace,rotace, barvaU, barvaV, barvaW)
 arguments
     rozmer;
     konec;
     translace = [0,0,0];
     rotace = 0;
+    barvaU = 'b';
+    barvaV = barvaU;
+    barvaW = barvaU;
 end
 
 R = [cosd(rotace), -sind(rotace); 
@@ -114,10 +119,10 @@ w1.z = w1.z + translace(3);
 
 view(3)
 grid on
-plot3(u1.x, u1.y, u1.z, 'b-', LineWidth=2, DisplayName="Rameno U")
+plot3(u1.x, u1.y, u1.z, barvaU, LineWidth=2, DisplayName="Rameno U")
 hold on
-plot3(v1.x, v1.y, v1.z, 'g-', LineWidth=2, DisplayName="Rameno V")
-plot3(w1.x, w1.y, w1.z, 'r-', LineWidth=2, DisplayName="Rameno W")
+plot3(v1.x, v1.y, v1.z, barvaV, LineWidth=2, DisplayName="Rameno V")
+plot3(w1.x, w1.y, w1.z, barvaW, LineWidth=2, DisplayName="Rameno W")
 % plot3(linex,liney,linez,'k-', LineWidth=4);
 % surf(x_1, y_1, z_1, 'FaceColor', [0.3,0.3,0.8], 'FaceAlpha', transp, "LineStyle",":");
 % surf(x_2, y_2, z_2, 'FaceColor', [0.3,0.8,0.3], 'FaceAlpha',transp, "LineStyle",":");

@@ -10,4 +10,5 @@ natazeni = [260,260,260];
 figure
 hold on
 vykresleni_deltabot(rozmer,pos,[0,0,0],180)
-vykresleni_deltabot(rozmer,pos,[300,0,0])
+vykresleni_deltabot(rozmer,pos,[400,0,0],0,'r')
+legend off
