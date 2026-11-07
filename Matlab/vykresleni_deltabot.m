@@ -155,8 +155,8 @@ plot3(w1.x, w1.y, w1.z, barvaW, LineWidth=2, DisplayName="Rameno W")
 % surf(x_2, y_2, z_2, 'FaceColor', [0.3,0.8,0.3], 'FaceAlpha',transp, "LineStyle",":");
 % surf(x_3, y_3, z_3, 'FaceColor', [0.3,0.3,0.8], 'FaceAlpha',transp, "LineStyle",":");
 axis("equal")
-scatter3(0+translace(1),0+translace(2),0+translace(3),'x', 'w', 'HandleVisibility', 'off');
-scatter3(x5+translace(1),y5+translace(2),z5+translace(3),'o', 'filled', 'w', 'HandleVisibility', 'off');
+scatter3(u1.x(1), u1.y(1), u1.z(1),'x', 'w', 'HandleVisibility', 'off');
+scatter3(u1.x(6), u1.y(6), u1.z(6),'o', 'filled', 'w', 'HandleVisibility', 'off');
 xlabel x[mm]
 ylabel y[mm]
 zlabel z[mm]
@@ -165,6 +165,6 @@ legend('show')
 % exportgraphics(fig, "Prima.png", "Resolution",600)
 
 %=================================UPRAVA===================================
-efektor = [x5, y5, z5] + translace;
+efektor = [u1.x(6), u1.y(6), u1.z(6)];
 %==========================================================================
 end
