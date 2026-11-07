@@ -17,14 +17,18 @@
 % Popis:
 %     Přidání možnosti translace robota v prostoru a odeprání figure
 %     (volání v main pro možnost volání pro více kreslení)
-% 
+%     Vykresleni cele delky pohyblivych os
+%
 % Přidaný vstupy:
 %     - translace = posunutí o x,y,z
 %     - rotace = otočení okolo osy z robotu ve stupních
 %     - barva = barva joku se vykreslí model
+% Přidání výstupu:
+%     - koncový bod robotu v souřadném systému celé oblasti
 %==========================================================================
 
-function [] = vykresleni_deltabot(rozmer,konec,translace,rotace, barvaU, barvaV, barvaW)
+function [efektor] = vykresleni_deltabot(rozmer,konec,translace,rotace, barvaU, barvaV, barvaW)
+%=================================UPRAVA===================================
 arguments
     rozmer;
     konec;
@@ -37,6 +41,7 @@ end
 
 R = [cosd(rotace), -sind(rotace); 
     sind(rotace),  cosd(rotace)];
+%==========================================================================
 
 d1 = rozmer(1);
 d2 = rozmer(2);
@@ -65,6 +70,7 @@ u1.z = u1.z;
 v1.z = v1.z;
 w1.z = w1.z;
 
+%=================================UPRAVA===================================
 % Rotace vykresleného robotu
 rotovaniU = R*[u1.x;u1.y];
 rotovaniV = R*[v1.x;v1.y];
@@ -86,6 +92,11 @@ v1.z = v1.z + translace(3);
 w1.x = w1.x + translace(1);
 w1.y = w1.y + translace(2);
 w1.z = w1.z + translace(3);
+
+rotU = (R*[d1+270*sind(alfa);0]);
+rotV = (R*[-cosd(60)*(d1+270*sind(alfa));-sind(60)*(d1+270*sind(alfa))]);
+rotW = (R*[-cosd(60)*(d1+270*sind(alfa));sind(60)*(d1+270*sind(alfa))]);
+
 %==========================================================================
 
 % col = [0.2,0.6,0.8]
@@ -118,9 +129,25 @@ w1.z = w1.z + translace(3);
 % figure
 
 view(3)
-grid on
-plot3(u1.x, u1.y, u1.z, barvaU, LineWidth=2, DisplayName="Rameno U")
+%=================================UPRAVA===================================
+% Vykresleni kompletni delky os
+plot3([u1.x(2),rotU(1,:)+translace(1)], ...
+    [u1.y(2),rotU(2,:)+translace(2)], ...
+    [u1.z(2),(270*cosd(alfa))+translace(3)], ...
+    'w',LineWidth=1)
 hold on
+plot3([v1.x(2),rotV(1,:)+translace(1)], ...
+    [v1.y(2),rotV(2,:)+translace(2)], ...
+    [v1.z(2),(270*cosd(alfa))+translace(3)], ...
+    'w',LineWidth=1)
+plot3([w1.x(2),rotW(1,:)+translace(1)], ...
+    [w1.y(2),rotW(2,:)+translace(2)], ...
+    [w1.z(2),(270*cosd(alfa))+translace(3)], ...
+    'w',LineWidth=1)
+%==========================================================================
+
+
+plot3(u1.x, u1.y, u1.z, barvaU, LineWidth=2, DisplayName="Rameno U")
 plot3(v1.x, v1.y, v1.z, barvaV, LineWidth=2, DisplayName="Rameno V")
 plot3(w1.x, w1.y, w1.z, barvaW, LineWidth=2, DisplayName="Rameno W")
 % plot3(linex,liney,linez,'k-', LineWidth=4);
@@ -136,4 +163,8 @@ zlabel z[mm]
 title("Deltabot")
 legend('show')
 % exportgraphics(fig, "Prima.png", "Resolution",600)
+
+%=================================UPRAVA===================================
+efektor = [x5, y5, z5] + translace;
+%==========================================================================
 end
