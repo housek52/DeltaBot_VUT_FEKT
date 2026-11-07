@@ -13,4 +13,4 @@ Autoři projektu DeltaBot:
 
  Tato diplomová práce se zabývá detekcí kolizí robotů a jejich řešením.Obsahuje původní funkční program PLC vytvořený pro bakalářku **Řízení pohybu DeltaBotu *(Vít Fousek)***, která je přepsaná na novější jádro AS runtime 6. Pro rešerši vzniku kolizí a jsou použity modely vypočítané v Matlabu z práce **Analytické modelování delta robota *(Ondřej Dušek)***, které jsou upraveny tak, aby mohli být zobrazeny dva modely deltabotu vedle sebe a jejich vzájemná pozice.
 
- Do budoucna je vhodné zvážit možnost propojení programu PLC přímo s Matlabem, čímž se zabývala práce **Komunikační prostředí mezi Matlab a PLC B&R pro řízení delta robota *(Kryštof Doležal)***
+ Do budoucna je vhodné zvážit možnost propojení programu PLC přímo s Matlabem, čímž se zabývala práce **Komunikační prostředí mezi Matlab a PLC B&R pro řízení delta robota *(Kryštof Doležal)***. Propojení Matlabu a PLC by mohlo ulehčit detekci kolizí a posílat příkazy pro jejich řešení.
