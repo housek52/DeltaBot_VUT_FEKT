@@ -9,3 +9,6 @@ Temp/
 *.slxc
 slprj/
 *.mex*
+
+# VS Code
+.vscode/
