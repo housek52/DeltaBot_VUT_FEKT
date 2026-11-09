@@ -54,6 +54,24 @@ y5 = konec(2);
 z5 = konec(3);
 [U, V, W] = InverzniKinematika([d1,d2,d3,d4,d5], [x5,y5,z5]);
 
+if U<0
+    U = 0;
+elseif U>260
+    U = 260;
+end
+
+if V<0
+    V = 0;
+elseif V>260
+    V = 260;
+end
+
+if W<0
+    W = 0;
+elseif W>260
+    W = 260;
+end
+
 u1 = struct( ...
     'x', [0, d1,            d1+U*sind(alfa),  d1+U*sind(45)+d3*cosd(alfa),            x5+d5,             x5], ...
     'y', [0, 0,             0,               0,                                    y5,               y5], ...
@@ -134,16 +152,16 @@ view(3)
 plot3([u1.x(2),rotU(1,:)+translace(1)], ...
     [u1.y(2),rotU(2,:)+translace(2)], ...
     [u1.z(2),(270*cosd(alfa))+translace(3)], ...
-    'w',LineWidth=1)
+    Color='#FF6700',LineWidth=1)
 hold on
 plot3([v1.x(2),rotV(1,:)+translace(1)], ...
     [v1.y(2),rotV(2,:)+translace(2)], ...
     [v1.z(2),(270*cosd(alfa))+translace(3)], ...
-    'w',LineWidth=1)
+    Color='#FF6700',LineWidth=1)
 plot3([w1.x(2),rotW(1,:)+translace(1)], ...
     [w1.y(2),rotW(2,:)+translace(2)], ...
     [w1.z(2),(270*cosd(alfa))+translace(3)], ...
-    'w',LineWidth=1)
+    Color='#FF6700',LineWidth=1)
 %==========================================================================
 
 
@@ -154,7 +172,7 @@ plot3(w1.x, w1.y, w1.z, barvaW, LineWidth=2, DisplayName="Rameno W")
 % surf(x_1, y_1, z_1, 'FaceColor', [0.3,0.3,0.8], 'FaceAlpha', transp, "LineStyle",":");
 % surf(x_2, y_2, z_2, 'FaceColor', [0.3,0.8,0.3], 'FaceAlpha',transp, "LineStyle",":");
 % surf(x_3, y_3, z_3, 'FaceColor', [0.3,0.3,0.8], 'FaceAlpha',transp, "LineStyle",":");
-axis("equal")
+% axis("equal")
 % scatter3(u1.x(1), u1.y(1), u1.z(1),'x', 'w', 'HandleVisibility', 'off');
 % scatter3(u1.x(6), u1.y(6), u1.z(6),'o', 'filled', 'w', 'HandleVisibility', 'off');
 xlabel x[mm]
