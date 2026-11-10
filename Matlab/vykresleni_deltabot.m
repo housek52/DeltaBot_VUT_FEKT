@@ -178,7 +178,7 @@ plot3(w1.x, w1.y, w1.z, barvaW, LineWidth=2, DisplayName="Rameno W")
 xlabel x[mm]
 ylabel y[mm]
 zlabel z[mm]
-title("Deltabot")
+% title("Deltabot")
 legend('show')
 % exportgraphics(fig, "Prima.png", "Resolution",600)
 

@@ -3,6 +3,7 @@ Binaries/
 Diagnosis/
 Temp/
 *.set
+*.isopen
 
 # Matlab
 *.asv

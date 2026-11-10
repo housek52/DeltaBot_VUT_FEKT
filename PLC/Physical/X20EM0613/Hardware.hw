@@ -46,13 +46,13 @@
       <Parameter ID="SubnetMask" Value="255.255.255.0" />
       <Parameter ID="ActivateSnmp" Value="2" />
     </Connector>
-    <Parameter ID="ConfigurationID" Value="DeltaBot_X20CP0484" />
+    <Parameter ID="ConfigurationID" Value="DeltaBot_X20EM0613" />
+    <Parameter ID="Simulation" Value="1" />
     <Parameter ID="TimerDeviceType" Value="EPLX2X" />
     <Parameter ID="TimerDevice" Value="X20EM0613.IF3" />
     <Parameter ID="TaskClassIdleTime" Value="4000" />
     <Parameter ID="Cyclic1Duration" Value="2000" />
     <Parameter ID="Cyclic1Tolerance" Value="0" />
-    <Parameter ID="Cyclic1Output" Value="1" />
     <Parameter ID="Cyclic3Duration" Value="48000" />
     <Parameter ID="Cyclic3Tolerance" Value="48000" />
     <Parameter ID="Cyclic8Duration" Value="8000" />
@@ -62,9 +62,6 @@
     <Group ID="FileDevice2" />
     <Parameter ID="FileDeviceName2" Value="PcSim" />
     <Parameter ID="FileDevicePath2" Value="USER_PATH\" />
-    <Parameter ID="TimeZone" Value="145" />
-    <Parameter ID="ActivateSntpServer" Value="1" />
-    <Parameter ID="Stratum" Value="3" />
     <Parameter ID="ActivateFtpServer" Value="1" />
     <Parameter ID="FTPProtocol" Value="1" />
     <Group ID="FtpUser1" />
