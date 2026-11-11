@@ -5,7 +5,6 @@
 % Datum:           7.11.2026
 % Popis:          
 %   Testovani kolizi deltabotu, jejichz pracovni prostory se protinaji.
-%   
 %==========================================================================
 
 
@@ -19,10 +18,14 @@ clc, clear variables, close all
 % [U,V,W] = InverzniKinematika(rozmer,pos);
 
 % Vykresleni robotu a spojnice koncovych bodu
-simulace();
+kolize = figure('Name', 'Kolize');
+simulace(kolize);
 
-function simulace()
-    fig = figure('Name', 'Kolize');
+% kolize2 = figure('Name', 'Kolize');
+% simulace(kolize2);
+
+function simulace(fig)
+    % Nastaveni vykresleni
     ax = axes('Parent', fig);
     ax.XLimMode = "manual";
     ax.YLimMode = "manual";
@@ -32,22 +35,19 @@ function simulace()
     ax.ZLim = [-500,200];
     axis(ax, 'equal')
 
-    fig = gcf;
-    fig.Color = 'w';
-    ax = gca;
-    ax.Color = 'w';
-    ax.XColor = 'k'; ax.YColor = 'k'; ax.ZColor = 'k';
-    grid on;
 
-    % con = figure('Name', 'Ovladani');
-
-    % Robot 1
+    % Cteni pozice robota 1
     % Posuvnik X
     uicontrol('Style', 'text', 'Position', [50, 300, 100, 20], 'String', 'Posun robota X:');
     sldX1 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -400, 'Max', 400, 'Value', 0, ...
         'Position', [50, 270, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [30, 520, 50, 20], 'String', 'X1:');
+    edtX1 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [50, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
     
 
     % Posuvnik Y
@@ -55,40 +55,145 @@ function simulace()
     sldY1 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -400, 'Max', 400, 'Value', 0, ...
         'Position', [50, 170, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [130, 520, 50, 20], 'String', 'Y1:');
+    edtY1 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [150, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
     
     % Posuvnik Z
     uicontrol('Style', 'text', 'Position', [50, 100, 100, 20], 'String', 'Posun robota Z:');
     sldZ1 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -500, 'Max', -176, 'Value', -400, ...
         'Position', [50, 70, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [230, 520, 50, 20], 'String', 'Z1:');
+    edtZ1 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [250, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
 
-    % Robot 2
+    % Cteni pozice robota 2
     % Posuvnik X
     uicontrol('Style', 'text', 'Position', [1200, 300, 100, 20], 'String', 'Posun robota X:');
     sldX2 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -400, 'Max', 400, 'Value', 0, ...
         'Position', [1200, 270, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [1230, 520, 50, 20], 'String', 'X2:');
+    edtX2 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [1250, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
 
     % Posuvnik Y
-    uicontrol('Style', 'text', 'Position', [1200, 200, 100, 20], 'String', 'Posun robota Y:');
+    uicontrol('Style', 'text', 'Position', [1200, 200, 100, 20], 'String', 'Posun robota Y2:');
     sldY2 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -400, 'Max', 400, 'Value', 0, ...
         'Position', [1200, 170, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [1330, 520, 50, 20], 'String', 'Y2:');
+    edtY2 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [1350, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
 
     % Posuvnik Z
-    uicontrol('Style', 'text', 'Position', [1200, 100, 100, 20], 'String', 'Posun robota Z:');
+    uicontrol('Style', 'text', 'Position', [1200, 100, 100, 20], 'String', 'Posun robota Z2:');
     sldZ2 = uicontrol('Parent', fig, 'Style', 'slider', ...
         'Min', -500, 'Max', -176, 'Value', -400, ...
         'Position', [1200, 70, 300, 25], ...
-        'Callback', @(src, event) vykresli());
+        'Callback', @(src, event) zmenaSliderem());
+    uicontrol('Style', 'text', 'Position', [1430, 520, 50, 20], 'String', 'Z2:');
+    edtZ2 = uicontrol('Parent', fig, 'Style', 'edit', ...
+        'String', '0.00', ... % Výchozí zobrazené číslo
+        'Position', [1450, 500, 60, 25], ...
+        'Callback', @(src, event) zmenaTextem());
 
     uicontrol('String', 'Export PDF', 'Callback', @plotButtonPushed);
 
     vykresli();
+
+    function zmenaSliderem()
+        % Aktualizuje text v políčku podle nové hodnoty ze slideru
+        edtX1.String = sprintf('%.2f', sldX1.Value);
+        edtY1.String = sprintf('%.2f', sldY1.Value);
+        edtZ1.String = sprintf('%.2f', sldZ1.Value);
+        edtX2.String = sprintf('%.2f', sldX2.Value);
+        edtY2.String = sprintf('%.2f', sldY2.Value);
+        edtZ2.String = sprintf('%.2f', sldZ2.Value);
+        vykresli();
+    end
+
+    % Když uživatel ručně přepíše číslo v políčku:
+    function zmenaTextem()
+        % Převede zadaný text na číslo (str2double)
+        x1 = str2double(edtX1.String);
+        y1 = str2double(edtY1.String);
+        z1 = str2double(edtZ1.String);
+        x2 = str2double(edtX2.String);
+        y2 = str2double(edtY2.String);
+        z2 = str2double(edtZ2.String);
+
+        % Kontrola, zda uživatel nezadal text nebo blbost (NaN)
+        if isnan(x1)
+            edtX1.String = sprintf('%.2f', sldX1.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            x1 = min(max(x1, sldX1.Min), sldX1.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldX1.Value = x1;
+            edtX1.String = sprintf('%.2f', x1);
+        end
+        if isnan(y1)
+            edtY1.String = sprintf('%.2f', sldY1.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            y1 = min(max(y1, sldY1.Min), sldY1.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldY1.Value = y1;
+            edtY1.String = sprintf('%.2f', y1);
+        end
+        if isnan(z1)
+            edtZ1.String = sprintf('%.2f', sldZ1.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            z1 = min(max(z1, sldZ1.Min), sldZ1.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldZ1.Value = z1;
+            edtZ1.String = sprintf('%.2f', z1);
+        end
+
+        if isnan(x2)
+            edtX2.String = sprintf('%.2f', sldX2.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            x2 = min(max(x2, sldX2.Min), sldX2.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldX2.Value = x2;
+            edtX2.String = sprintf('%.2f', x2);
+        end
+        if isnan(y2)
+            edtY2.String = sprintf('%.2f', sldY2.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            y2 = min(max(y2, sldY2.Min), sldY2.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldY2.Value = y2;
+            edtY2.String = sprintf('%.2f', y2);
+        end
+        if isnan(z2)
+            edtZ2.String = sprintf('%.2f', sldZ2.Value); % Vrátí předchozí platnou hodnotu
+        else
+            % Omezí zadané číslo na rozsah slideru (Min az Max)
+            z2 = min(max(z2, sldZ2.Min), sldZ2.Max);
+            % Nastaví slider i vyčištěný text v políčku
+            sldZ2.Value = z2;
+            edtZ2.String = sprintf('%.2f', z2);
+        end
+        vykresli();
+    end
 
     function vykresli()
         rozmer = [50,370,50,500,50];    % Rozmery deltabotu
@@ -134,7 +239,7 @@ function simulace()
             'FontSize', 10, ...
             'FontWeight', 'bold', ...
             'Color',barvaT);
-        title("Vzdálenost koncových bodů",Color='k')
+        % title("Vzdálenost koncových bodů",Color='k')
     end
 
     function plotButtonPushed(src,event)
