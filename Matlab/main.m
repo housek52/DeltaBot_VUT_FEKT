@@ -214,14 +214,33 @@ function simulace(fig)
         robot1 = vykresleni_deltabot(rozmer,pos1,[0,0,0],180);
         robot2 = vykresleni_deltabot(rozmer,pos2,[400,0,0],0,'k');
         koncove_body = [robot1;robot2];
+        assignin('base','koncove_body',koncove_body);
         legend off
         grid on
 
-        % Vypocet vzdalenosti koncovych bodu
+        % METODA 1: Vypocet vzdalenosti koncovych bodu
         l = (((robot2(1)-robot1(1))^2)+((robot2(2)-robot1(2))^2)+((robot2(3)-robot1(3))^2))^(1/2);
-    
-        % Urci barvu spojnice podle vzdalenosti
-        if l<150
+        assignin('base','l',l);
+        kb_x = robot2(1)-robot1(1);
+        kb_y = robot2(2)-robot1(2);
+        
+        % pokud robot1 saha za robota2, musi byt rozdil v y
+        if kb_x < 0
+            if 1.5*abs(kb_x)+200>abs(kb_y)
+                e = 1;
+            else
+                e = 0;
+            end
+        else
+            if l < 165
+                e = 1;
+            else
+                e = 0;
+            end
+        end
+        assignin('base','e',e);
+        
+        if e == 1
             barvaT = 'r';
             barvaL = 'r';
         else
