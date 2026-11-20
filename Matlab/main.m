@@ -112,8 +112,10 @@ function simulace(fig)
         'Callback', @(src, event) zmenaTextem());
 
     uicontrol('String', 'Export PDF', 'Callback', @plotButtonPushed);
-
-    vykresli();
+    
+    pos1_l = [0,0,-400];               % Vychozi poloha deltabotu
+    pos2_l = [0,0,-400];
+    [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
 
     function zmenaSliderem()
         % Aktualizuje text v políčku podle nové hodnoty ze slideru
@@ -123,7 +125,7 @@ function simulace(fig)
         edtX2.String = sprintf('%.2f', sldX2.Value);
         edtY2.String = sprintf('%.2f', sldY2.Value);
         edtZ2.String = sprintf('%.2f', sldZ2.Value);
-        vykresli();
+        [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
     end
 
     % Když uživatel ručně přepíše číslo v políčku:
@@ -192,13 +194,12 @@ function simulace(fig)
             sldZ2.Value = z2;
             edtZ2.String = sprintf('%.2f', z2);
         end
-        vykresli();
+        [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
     end
 
-    function vykresli()
+    function [pos1_l, pos2_l] = vykresli(pos1_l,pos2_l)
         rozmer = [50,370,50,500,50];    % Rozmery deltabotu
-        pos1 = [0,0,-0];               % Vychozi poloha deltabotu
-        pos2 = [0,0,0];  
+          
         % Cteni slideru
         pos1(1) = sldX1.Value;
         pos1(2) = sldY1.Value;
@@ -211,9 +212,15 @@ function simulace(fig)
         cla(ax);
         hold(ax, 'on')
         % Vykresli dva deltaboty
-        robot1 = vykresleni_deltabot(rozmer,pos1,[0,0,0],180);
-        robot2 = vykresleni_deltabot(rozmer,pos2,[400,0,0],0,'k');
+        robot1 = vykresleni_deltabot(rozmer,pos1,pos1_l,[0,0,0],180);
+        robot2 = vykresleni_deltabot(rozmer,pos2,pos2_l,[400,0,0],0,'k');
         koncove_body = [robot1;robot2];
+        pos1_l(1) = -robot1(1);
+        pos1_l(2) = -robot1(2);
+        pos1_l(3) = robot1(3);
+        pos2_l(1) = robot2(1)-400;
+        pos2_l(2) = robot2(2);
+        pos2_l(3) = robot2(3);
         assignin('base','koncove_body',koncove_body);
         legend off
         grid on
@@ -226,17 +233,21 @@ function simulace(fig)
         
         % pokud robot1 saha za robota2, musi byt rozdil v y
         if kb_x < 0
-            if 1.5*abs(kb_x)+200>abs(kb_y)
+            if 0.5*abs(kb_x)+200>abs(kb_y)
                 e = 1;
             else
                 e = 0;
             end
+        elseif kb_x < 60 && abs(kb_y) > 100
+            if 2.5*abs(kb_x)+200 > abs(kb_y)
+                e = 1;
+            else
+                e = 0;
+            end
+        elseif kb_x < 60
+            e = 1;
         else
-            if l < 165
-                e = 1;
-            else
-                e = 0;
-            end
+            e = 0;
         end
         assignin('base','e',e);
         
@@ -251,14 +262,14 @@ function simulace(fig)
         % Vykresli spojnici koncovych bodu
         plot3(koncove_body(:,1),koncove_body(:,2),koncove_body(:,3), 'o-','MarkerFaceColor', barvaL, 'MarkerEdgeColor', barvaL, 'Color',barvaL)
         % Vykresli vzdalenost koncovych bodu u prostredku spojnice
-        line_cent = [((robot2(1)-robot1(1))/2)+robot1(1),((robot2(2)-robot1(2))/2)+robot1(2),((robot2(3)-robot1(3))/2)+robot1(3)];
-        text(line_cent(1),line_cent(2),line_cent(3), sprintf(' L = %.2f', l), ...
-            'HorizontalAlignment', 'center', ...
-            'VerticalAlignment', 'top', ...
-            'FontSize', 10, ...
-            'FontWeight', 'bold', ...
-            'Color',barvaT);
-        % title("Vzdálenost koncových bodů",Color='k')
+        % line_cent = [((robot2(1)-robot1(1))/2)+robot1(1),((robot2(2)-robot1(2))/2)+robot1(2),((robot2(3)-robot1(3))/2)+robot1(3)];
+        % text(line_cent(1),line_cent(2),line_cent(3), sprintf(' L = %.2f', l), ...
+        %     'HorizontalAlignment', 'center', ...
+        %     'VerticalAlignment', 'top', ...
+        %     'FontSize', 10, ...
+        %     'FontWeight', 'bold', ...
+        %     'Color',barvaT);
+        title(sprintf("Vzdálenost koncových bodů L = %.2f", l),Color=barvaT)
     end
 
     function plotButtonPushed(src,event)
