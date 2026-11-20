@@ -260,16 +260,8 @@ function simulace(fig)
         end
 
         % Vykresli spojnici koncovych bodu
-        plot3(koncove_body(:,1),koncove_body(:,2),koncove_body(:,3), 'o-','MarkerFaceColor', barvaL, 'MarkerEdgeColor', barvaL, 'Color',barvaL)
-        % Vykresli vzdalenost koncovych bodu u prostredku spojnice
-        % line_cent = [((robot2(1)-robot1(1))/2)+robot1(1),((robot2(2)-robot1(2))/2)+robot1(2),((robot2(3)-robot1(3))/2)+robot1(3)];
-        % text(line_cent(1),line_cent(2),line_cent(3), sprintf(' L = %.2f', l), ...
-        %     'HorizontalAlignment', 'center', ...
-        %     'VerticalAlignment', 'top', ...
-        %     'FontSize', 10, ...
-        %     'FontWeight', 'bold', ...
-        %     'Color',barvaT);
-        title(sprintf("Vzdálenost koncových bodů L = %.2f", l),Color=barvaT)
+        % plot3(koncove_body(:,1),koncove_body(:,2),koncove_body(:,3), 'o-','MarkerFaceColor', barvaL, 'MarkerEdgeColor', barvaL, 'Color',barvaL)
+        % title(sprintf("Vzdálenost koncových bodů L = %.2f", l),Color=barvaT)
     end
 
     function plotButtonPushed(src,event)

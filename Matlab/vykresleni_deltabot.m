@@ -18,8 +18,11 @@
 %     Přidání možnosti translace robota v prostoru a odeprání figure
 %     (volání v main pro možnost volání pro více kreslení)
 %     Vykresleni cele delky pohyblivych os
+%     Pri nekorektni pozici vykresli posledni spravnou porzici
 %
 % Přidaný vstupy:
+%     - pos_last = predchozi vykreslena pozice, ktera se vykresli pokud je
+%     nova nekorektni
 %     - translace = posunutí o x,y,z
 %     - rotace = otočení okolo osy z robotu ve stupních
 %     - barva = barva joku se vykreslí model
@@ -35,7 +38,7 @@ arguments
     pos_last;               % predchozi pozice koncoveho bodu
     translace = [0,0,0];    % posunuti deltanotu v prostoru
     rotace = 0;             % rotace deltabotu v prostoru
-    barvaU = 'b';           % 
+    barvaU = 'b';           % barva vykresleni
     barvaV = barvaU;
     barvaW = barvaU;
 end
@@ -54,6 +57,7 @@ x5 = konec(1);
 y5 = konec(2);
 z5 = konec(3);
 
+%=================================UPRAVA===================================
 lastwarn('');
 [U, V, W] = InverzniKinematika([d1,d2,d3,d4,d5], [x5,y5,z5]);
 [wrng,~] = lastwarn;
@@ -63,24 +67,7 @@ if ~isempty(wrng)
     z5 = pos_last(3);
     [U, V, W] = InverzniKinematika([d1,d2,d3,d4,d5], [x5,y5,z5]);
 end
-
-% if U<0
-%     U = 0;
-% elseif U>260
-%     U = 260;
-% end
-% 
-% if V<0
-%     V = 0;
-% elseif V>260
-%     V = 260;
-% end
-% 
-% if W<0
-%     W = 0;
-% elseif W>260
-%     W = 260;
-% end
+%==========================================================================
 
 u1 = struct( ...
     'x', [0, d1,            d1+U*sind(alfa),  d1+U*sind(45)+d3*cosd(alfa),            x5+d5,             x5], ...
