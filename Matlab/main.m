@@ -239,75 +239,7 @@ function simulace(fig, rozmer)
         % [l,e] = M0_vkb(koncove_body);
 
         %% METODA 1: Vypocet vzdalenosti koncovych bodu pooci elipsy
-        elipsa_S = [l_base*0.75,0,0] + robot2;                             % stred posunut na kraj konstrukce
-        r_min = 65;                                                        % vzdalenost bodu efektoru k elipse v hlavni ose
-
-        a = r_min + l_base*0.75;                                           % poloosa elipsy v ose x
-        b = l_base + 40;                                                   % poloosa elipsy v ose y
-        t = pi/2:pi/50:3*pi/2;                                             % stupne pro vykresleni polovyny elipsy
-
-        elipsa = [elipsa_S(1) + a*cos(t); elipsa_S(2) + b*sin(t);];        % vypocet elipsy v rovine xy
-        elipsa(3,:) = ones(size(t))*elipsa_S(3);                           % urceni pozice elipsy v z
-
-        plot3(elipsa(1,:),elipsa(2,:),elipsa(3,:), 'LineWidth',0.5,'Color','r');
-        plot3(elipsa_S(1),elipsa_S(2),elipsa_S(3),'Color','k','LineStyle','none','Marker','x','MarkerSize',25);
-        % view([0,0]) % pohled na rovinu xz
-        % view([0,90])    % pohled na rovinu xy
-        % view([90,0])    % pohled na rovinu yz
-
-        % Spojnice koncový bod a počátek robota
-        % zjednodušeně
-        
-        dx = stred(1)-robot2(1);
-        dy = stred(2)-robot2(2);
-        dz = stred(3)-robot2(3);
-
-        % jednotkove vektory
-        F = (dx^2+dy^2+dz^2)^(1/2);
-        i = dx/F;
-        j = dy/F;
-        k = dz/F;
-
-        % vypocet smernice x pro rozsireni poloosy a
-        % pro urceni rozsirovani poloosy a urci spojnici nejblize k druhemu robotu
-        if jzd2(2,1)<=jzd2(3,1)
-            jOsX = 2;
-        else
-            jOsX = 3;
-        end
-
-        plot3(jzd2(:,1),jzd2(:,2),jzd2(:,3),'o','LineWidth',3);
-        % plot3([-rozmer(1)*cosd(60)+koncove_body(2,1),jzd2(jOs,1)],[0,0],[koncove_body(2,3),jzd2(jOs,3)],'LineWidth',5)
-        da = ((-rozmer(1)*cosd(60)+stred(1))-jzd2(jOsX,1))/F;
-        assignin('base','da',da);
-
-        jak_moc = 10;
-        ze = robot2(3):k*jak_moc:stred(3); % od pozice z koncového bodu do počátku robata
-        assignin('base','ze',ze);
-        sz = numel(ze);
-        se = numel(t);
-
-        % vypocet smernice y pro rozsireni poloosy b
-        db1 = (-rozmer(1)*sind(60)+koncove_body(2,2))-jzd2(2,2);
-        db2 = (rozmer(1)*sind(60)+koncove_body(2,2))-jzd2(3,2);
-        if abs(db1)>abs(db2)
-            db = db1/F;
-            jOsY = 2;
-        else
-            db = -db2/F;
-            jOsY = 3;
-        end
-
-        % plot3([400,400],[-(-1)^jOsY*rozmer(1)*sind(60)+koncove_body(2,2),jzd2(jOsY,2)],[koncove_body(2,3),jzd2(jOsY,3)],'LineWidth',5)
-
-        for c = 1:sz-1
-            zp = ones(1,se)*ze(c);
-            elipsa = [elipsa_S(1) + (a+da*jak_moc*c)*cos(t); elipsa_S(2) + (b+db*jak_moc*c)*sin(t);];
-            plot3(elipsa(1,:)+(c*jak_moc*i),elipsa(2,:)+(c*jak_moc*j),zp, 'LineWidth',0.5,'Color','r');
-        end
-
-        plot3([robot2(1),stred(1)],[robot2(2),0],[robot2(3),0],'g');
-
+        M1_elipsa(robot1, robot2, jzd2, stred, l_base, l_efekrot);
 
     end
 
