@@ -26,11 +26,12 @@
 %     - translace = posunutí o x,y,z
 %     - rotace = otočení okolo osy z robotu ve stupních
 %     - barva = barva joku se vykreslí model
-% Přidání výstupu:
+% Přidání výstupů:
 %     - koncový bod robotu v souřadném systému celé oblasti
+%     - vraci polohu jezdcu pohyblivych os v souradnicich x,y,z
 %==========================================================================
 
-function [efektor] = vykresleni_deltabot(rozmer,konec,pos_last,translace,rotace, barvaU, barvaV, barvaW)
+function [efektor,jezdce] = vykresleni_deltabot(rozmer,konec,pos_last,translace,rotace, barvaU, barvaV, barvaW)
 %=================================UPRAVA===================================
 arguments
     rozmer;                 % rozmery deltabota
@@ -181,5 +182,8 @@ legend('show')
 
 %=================================UPRAVA===================================
 efektor = [u1.x(6), u1.y(6), u1.z(6)];
+jezdce = [u1.x(4), u1.y(4), u1.z(4);
+        v1.x(4), v1.y(4), v1.z(4);
+        w1.x(4), w1.y(4), w1.z(4);];
 %==========================================================================
 end

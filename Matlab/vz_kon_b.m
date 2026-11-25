@@ -25,7 +25,7 @@ e = [l_efekrot*cosd(120), l_efekrot*sind(120);
 fig = figure;
 hold on
 axis('equal')
-axis([-200 500 -250 250])
+axis([-200 500 -300 300])
 
 % Vykresleni deltabota
 l_r = plot([0, r(1,1)], [0, r(1,2)], 'k', 'LineStyle',':','LineWidth',3);
@@ -55,14 +55,14 @@ l_e = plot([0, e(1,1)], [0, e(1,2)], 'k','LineWidth',3);
 
 % Elipsa Ohnisko v [0,0]
 
-elipsa_S = [l_base,0];             % stred posunut na kraj konstrukce
+elipsa_S = [l_base*0.75,0];             % stred posunut na kraj konstrukce
 r_min = 65;                     % vzdalenost bodu efektoru k elipse v hlavni ose
-a = r_min + elipsa_S(1);
-b = l_base;
+a = r_min + l_base*0.75;
+b = l_base + 40;
 t = pi/2:pi/50:3*pi/2;
 elipsa = [elipsa_S(1) + a*cos(t); elipsa_S(2) + b*sin(t)];
 l_el = plot(elipsa(1,:),elipsa(2,:), 'LineWidth',2,'Color','r');
-l_elS = plot(elipsa_S(1),elipsa_S(2),'Color','k','LineStyle','none','Marker','x','MarkerSize',25);
+l_elS = plot(elipsa_S(1),elipsa_S(2),'Color','k','LineStyle','none','LineWidth',2,'Marker','x','MarkerSize',25);
 
 % 1 = (x-m)^2/a^2 + (y-n)^2/b^2
 
@@ -105,6 +105,9 @@ colormap([1,0,0; 0,1,0]);
 clim([0,1])
 surf(X,Y,p,'EdgeColor', 'none', 'FaceAlpha', 0.3)
 
-legend([l_r,l_e,l_el,l_elS],{'Konstrukce os','Efektor','Limit povolené pozice','Střed elipsy'})
-
+lgd = legend([l_r,l_e,l_el,l_elS],{'Konstrukce os','Efektor','Limit povolené pozice','Střed elipsy'});
+fontsize(16, "points");
+lgd.Location = "northeast";
+lgd.Position(1) = lgd.Position(1) - 0.02;
+lgd.Position(2) = lgd.Position(2) - 0.01;
 exportgraphics(fig, 'limit.pdf', 'ContentType', 'vector');

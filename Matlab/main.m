@@ -5,13 +5,17 @@
 % Datum:           7.11.2026
 % Popis:          
 %   Testovani kolizi deltabotu, jejichz pracovni prostory se protinaji.
+%   Soubor slouzi k vykreseni situace dvou deltabotu s moznaosti jednoduche
+%   zmeny jejich vzajemne pozice. Jednotlive urceni spravnosti pozice bude 
+%   v jednotlivych funkcich, aby se na ne dalo samostatne a prehledne
+%   podivat.
 %==========================================================================
 
 
 
 clc, clear variables, close all
 
-% rozmer = [50,370,50,500,50];    % [offset, rameno, offset od ramena, karbon tyc ,offset k konec bodu]
+rozmer = [50,370,50,500,50];    % [offset, rameno, offset od ramena, karbon tyc ,offset k konec bodu]
 % pos = [-100,0,-400] ;              % [x,y,z]
 % natazeni = [260,260,260];
 % [pos(1),pos(2),pos(3)] = PrimaKinematika(rozmer,natazeni);
@@ -19,12 +23,12 @@ clc, clear variables, close all
 
 % Vykresleni robotu a spojnice koncovych bodu
 kolize = figure('Name', 'Kolize');
-simulace(kolize);
+simulace(kolize, rozmer);
 
 % kolize2 = figure('Name', 'Kolize');
 % simulace(kolize2);
 
-function simulace(fig)
+function simulace(fig, rozmer)
     % Nastaveni vykresleni
     ax = axes('Parent', fig);
     ax.XLimMode = "manual";
@@ -65,7 +69,7 @@ function simulace(fig)
     % Posuvnik Z
     uicontrol('Style', 'text', 'Position', [50, 100, 100, 20], 'String', 'Posun robota Z:');
     sldZ1 = uicontrol('Parent', fig, 'Style', 'slider', ...
-        'Min', -500, 'Max', -176, 'Value', -400, ...
+        'Min', -530, 'Max', -300, 'Value', -400, ...
         'Position', [50, 70, 300, 25], ...
         'Callback', @(src, event) zmenaSliderem());
     uicontrol('Style', 'text', 'Position', [230, 520, 50, 20], 'String', 'Z1:');
@@ -102,7 +106,7 @@ function simulace(fig)
     % Posuvnik Z
     uicontrol('Style', 'text', 'Position', [1200, 100, 100, 20], 'String', 'Posun robota Z2:');
     sldZ2 = uicontrol('Parent', fig, 'Style', 'slider', ...
-        'Min', -500, 'Max', -176, 'Value', -400, ...
+        'Min', -530, 'Max', -300, 'Value', -400, ...
         'Position', [1200, 70, 300, 25], ...
         'Callback', @(src, event) zmenaSliderem());
     uicontrol('Style', 'text', 'Position', [1430, 520, 50, 20], 'String', 'Z2:');
@@ -115,7 +119,7 @@ function simulace(fig)
     
     pos1_l = [0,0,-400];               % Vychozi poloha deltabotu
     pos2_l = [0,0,-400];
-    [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
+    [pos1_l,pos2_l] = vykresli(pos1_l, pos2_l, rozmer);
 
     function zmenaSliderem()
         % Aktualizuje text v políčku podle nové hodnoty ze slideru
@@ -125,7 +129,7 @@ function simulace(fig)
         edtX2.String = sprintf('%.2f', sldX2.Value);
         edtY2.String = sprintf('%.2f', sldY2.Value);
         edtZ2.String = sprintf('%.2f', sldZ2.Value);
-        [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
+        [pos1_l,pos2_l] = vykresli(pos1_l, pos2_l, rozmer);
     end
 
     % Když uživatel ručně přepíše číslo v políčku:
@@ -194,12 +198,10 @@ function simulace(fig)
             sldZ2.Value = z2;
             edtZ2.String = sprintf('%.2f', z2);
         end
-        [pos1_l,pos2_l] = vykresli(pos1_l,pos2_l);
+        [pos1_l,pos2_l] = vykresli(pos1_l, pos2_l, rozmer);
     end
 
-    function [pos1_l, pos2_l] = vykresli(pos1_l,pos2_l)
-        rozmer = [50,370,50,500,50];    % Rozmery deltabotu
-          
+    function [pos1_l, pos2_l] = vykresli(pos1_l, pos2_l, rozmer)
         % Cteni slideru
         pos1(1) = sldX1.Value;
         pos1(2) = sldY1.Value;
@@ -212,9 +214,13 @@ function simulace(fig)
         cla(ax);
         hold(ax, 'on')
         % Vykresli dva deltaboty
-        robot1 = vykresleni_deltabot(rozmer,pos1,pos1_l,[0,0,0],180);
-        robot2 = vykresleni_deltabot(rozmer,pos2,pos2_l,[400,0,0],0,'k');
+        stred = [400,0,0];
+
+        [robot1, jzd1] = vykresleni_deltabot(rozmer,pos1,pos1_l,[0,0,0],180);
+        [robot2, jzd2] = vykresleni_deltabot(rozmer,pos2,pos2_l,stred,0,'k');
+
         koncove_body = [robot1;robot2];
+
         pos1_l(1) = -robot1(1);
         pos1_l(2) = -robot1(2);
         pos1_l(3) = robot1(3);
@@ -222,46 +228,87 @@ function simulace(fig)
         pos2_l(2) = robot2(2);
         pos2_l(3) = robot2(3);
         assignin('base','koncove_body',koncove_body);
+
         legend off
         grid on
 
-        % METODA 1: Vypocet vzdalenosti koncovych bodu
-        l = (((robot2(1)-robot1(1))^2)+((robot2(2)-robot1(2))^2)+((robot2(3)-robot1(3))^2))^(1/2);
-        assignin('base','l',l);
-        kb_x = robot2(1)-robot1(1);
-        kb_y = robot2(2)-robot1(2);
+        l_base = 240;
+        l_efekrot = rozmer(1);
+
+        %% METODA 0: Vypocet vzdalenosti koncovych bodu jednoduchy
+        % [l,e] = M0_vkb(koncove_body);
+
+        %% METODA 1: Vypocet vzdalenosti koncovych bodu pooci elipsy
+        elipsa_S = [l_base*0.75,0,0] + robot2;                             % stred posunut na kraj konstrukce
+        r_min = 65;                                                        % vzdalenost bodu efektoru k elipse v hlavni ose
+
+        a = r_min + l_base*0.75;                                           % poloosa elipsy v ose x
+        b = l_base + 40;                                                   % poloosa elipsy v ose y
+        t = pi/2:pi/50:3*pi/2;                                             % stupne pro vykresleni polovyny elipsy
+
+        elipsa = [elipsa_S(1) + a*cos(t); elipsa_S(2) + b*sin(t);];        % vypocet elipsy v rovine xy
+        elipsa(3,:) = ones(size(t))*elipsa_S(3);                           % urceni pozice elipsy v z
+
+        plot3(elipsa(1,:),elipsa(2,:),elipsa(3,:), 'LineWidth',0.5,'Color','r');
+        plot3(elipsa_S(1),elipsa_S(2),elipsa_S(3),'Color','k','LineStyle','none','Marker','x','MarkerSize',25);
+        % view([0,0]) % pohled na rovinu xz
+        % view([0,90])    % pohled na rovinu xy
+        % view([90,0])    % pohled na rovinu yz
+
+        % Spojnice koncový bod a počátek robota
+        % zjednodušeně
         
-        % pokud robot1 saha za robota2, musi byt rozdil v y
-        if kb_x < 0
-            if 0.5*abs(kb_x)+200>abs(kb_y)
-                e = 1;
-            else
-                e = 0;
-            end
-        elseif kb_x < 60 && abs(kb_y) > 100
-            if 2.5*abs(kb_x)+200 > abs(kb_y)
-                e = 1;
-            else
-                e = 0;
-            end
-        elseif kb_x < 60
-            e = 1;
+        dx = stred(1)-robot2(1);
+        dy = stred(2)-robot2(2);
+        dz = stred(3)-robot2(3);
+
+        % jednotkove vektory
+        F = (dx^2+dy^2+dz^2)^(1/2);
+        i = dx/F;
+        j = dy/F;
+        k = dz/F;
+
+        % vypocet smernice x pro rozsireni poloosy a
+        % pro urceni rozsirovani poloosy a urci spojnici nejblize k druhemu robotu
+        if jzd2(2,1)<=jzd2(3,1)
+            jOsX = 2;
         else
-            e = 0;
-        end
-        assignin('base','e',e);
-        
-        if e == 1
-            barvaT = 'r';
-            barvaL = 'r';
-        else
-            barvaT = [0,0.7,0];
-            barvaL = [0,0.7,0];
+            jOsX = 3;
         end
 
-        % Vykresli spojnici koncovych bodu
-        % plot3(koncove_body(:,1),koncove_body(:,2),koncove_body(:,3), 'o-','MarkerFaceColor', barvaL, 'MarkerEdgeColor', barvaL, 'Color',barvaL)
-        % title(sprintf("Vzdálenost koncových bodů L = %.2f", l),Color=barvaT)
+        plot3(jzd2(:,1),jzd2(:,2),jzd2(:,3),'o','LineWidth',3);
+        % plot3([-rozmer(1)*cosd(60)+koncove_body(2,1),jzd2(jOs,1)],[0,0],[koncove_body(2,3),jzd2(jOs,3)],'LineWidth',5)
+        da = ((-rozmer(1)*cosd(60)+stred(1))-jzd2(jOsX,1))/F;
+        assignin('base','da',da);
+
+        jak_moc = 10;
+        ze = robot2(3):k*jak_moc:stred(3); % od pozice z koncového bodu do počátku robata
+        assignin('base','ze',ze);
+        sz = numel(ze);
+        se = numel(t);
+
+        % vypocet smernice y pro rozsireni poloosy b
+        db1 = (-rozmer(1)*sind(60)+koncove_body(2,2))-jzd2(2,2);
+        db2 = (rozmer(1)*sind(60)+koncove_body(2,2))-jzd2(3,2);
+        if abs(db1)>abs(db2)
+            db = db1/F;
+            jOsY = 2;
+        else
+            db = -db2/F;
+            jOsY = 3;
+        end
+
+        % plot3([400,400],[-(-1)^jOsY*rozmer(1)*sind(60)+koncove_body(2,2),jzd2(jOsY,2)],[koncove_body(2,3),jzd2(jOsY,3)],'LineWidth',5)
+
+        for c = 1:sz-1
+            zp = ones(1,se)*ze(c);
+            elipsa = [elipsa_S(1) + (a+da*jak_moc*c)*cos(t); elipsa_S(2) + (b+db*jak_moc*c)*sin(t);];
+            plot3(elipsa(1,:)+(c*jak_moc*i),elipsa(2,:)+(c*jak_moc*j),zp, 'LineWidth',0.5,'Color','r');
+        end
+
+        plot3([robot2(1),stred(1)],[robot2(2),0],[robot2(3),0],'g');
+
+
     end
 
     function plotButtonPushed(src,event)
